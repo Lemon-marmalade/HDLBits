@@ -1,4 +1,4 @@
-`default_nettype none
+`default_nettype none // this disables implicit nets to reduce some chance of bugs
 module top_module(
     input a,
     input b,
@@ -9,5 +9,5 @@ module top_module(
 
     assign out_n = ~((a & b) || (c & d));
     assign out = ((a & b) || (c & d));
-    
+
 endmodule
