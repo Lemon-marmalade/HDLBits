@@ -48,3 +48,18 @@ module FA (
 endmodule
 
 */
+
+/* Using logic gates
+module top_module (
+    input  [7:0] a,
+    input  [7:0] b,
+    output [7:0] s,
+    output overflow
+);
+
+	assign s = a+b;
+    // Signed overflow: same as if (a[7]==b[7] & a[7]!=s[7])
+    assign overflow = (~a[7]^b[7])&(s[7]^a[7]);
+
+endmodule
+*/
