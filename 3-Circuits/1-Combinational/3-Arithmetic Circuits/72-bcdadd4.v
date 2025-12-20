@@ -16,3 +16,26 @@ module top_module (
     
     assign cout = cout_wires[3];
 endmodule
+
+/* Second time around
+
+module top_module ( 
+    input [15:0] a, b,
+    input cin,
+    output cout,
+    output [15:0] sum );
+    wire [4:1] c;
+    bcd_fadd u0 (a[3:0],b[3:0],cin, c[1],sum[3:0]);
+    
+    genvar i;
+    generate
+        for (i=1;i<4;i++) begin: bcd_fadd_chain
+            bcd_fadd ui (a[i*4+3:i*4],b[i*4+3:i*4],c[i], c[i+1],sum[i*4+3:i*4]);
+        end
+    endgenerate
+    assign cout = c[4];
+    
+endmodule
+
+
+*/
