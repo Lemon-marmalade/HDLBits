@@ -48,3 +48,47 @@ module top_module(
     end
 
 endmodule
+
+/* Revisiting Conway's Game of Life (to fix very delicate and unstable edge case logic from before)
+
+module top_module(
+    input clk,
+    input load,
+    input [255:0] data,
+    output [255:0] q ); 
+    
+    integer i, j;
+    integer l, r, t, b, n;
+    reg [255:0] next_q;
+    
+    always @(*) begin
+        for (i=0;i<16;i++) begin
+            for (j=0; j<16;j++) begin
+                // Precalculate edge cases
+                l= (j==0)? 15:(j-1);
+                r = (j==15)? 0:(j+1);
+                b = (i==0)? 15:(i-1);
+                t = (i==15)? 0:(i+1);
+                // Calculate how many neighbours
+                n = (q[i*16+l]+q[t*16+l]+q[t*16+j]+q[t*16+r]+q[i*16+r]+q[b*16+r]+q[b*16+j]+q[b*16+l]);
+
+                if (n<2||n>3)
+                    next_q[i*16+j]<=0;
+                else if (n==3)
+                    next_q[i*16+j]<=1;
+                else
+                    next_q[i*16+j]<=q[i*16+j];
+            end
+        end
+    end
+    
+    always @(posedge clk) begin
+        if (load)
+            q<=data;
+        else
+            q<=next_q;
+    end
+    
+endmodule
+
+*/
