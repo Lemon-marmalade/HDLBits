@@ -14,3 +14,25 @@ module top_module (
     end
 
 endmodule
+
+/* Found more concise way
+
+module top_module (
+    input clk,
+    input resetn,   // synchronous reset
+    input in,
+    output out);
+    
+    wire[2:0] Q;
+    
+    always @(posedge clk) begin
+        if (~resetn)
+        	{Q,out}<=0;
+        else begin
+            {Q,out}<={in,Q};
+        end
+    end
+
+endmodule
+
+*/
