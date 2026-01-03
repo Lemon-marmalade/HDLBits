@@ -18,3 +18,18 @@ module top_module (
     assign Y3 = Y[3];
 
 endmodule
+
+/* Proper one-hot logic version as asked by question
+
+module top_module (
+    input [5:0] y,
+    input w,
+    output Y1, // state B
+    output Y3 // state D
+);
+    assign Y1 = y[0] & w;
+    assign Y3 = (y[1] & ~w)|(y[2] & ~w)|(y[4] & ~w)|(y[5] & ~w);
+
+endmodule
+
+*/
