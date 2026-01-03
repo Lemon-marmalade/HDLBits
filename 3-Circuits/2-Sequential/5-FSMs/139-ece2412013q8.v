@@ -27,3 +27,32 @@ module top_module (
     end
     assign z = (next_state==HIGH);
 endmodule
+
+/* Rroperly implementing the Mealy FSM
+
+module top_module (
+    input clk,
+    input aresetn,    // Asynchronous active-low reset
+    input x,
+    output z ); 
+    parameter IDLE=0, S1=1, S2=2;
+    reg [1:0] state, next_state;
+    
+    always @(*) begin
+        case(state)
+            IDLE: next_state = x? S1:IDLE;
+            S1: next_state = x? S1:S2;
+            S2: next_state = x? S1:IDLE;
+        endcase
+    end
+    always @(posedge clk or negedge aresetn) begin
+        if (!aresetn)
+            state<=IDLE;
+        else
+            state<=next_state;
+    end
+    assign z = (state==S2 & x);
+
+endmodule
+
+*/
