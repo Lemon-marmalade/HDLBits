@@ -31,3 +31,34 @@ module top_module (
     	else
         state <= next_state;
 endmodule
+
+/* Version from revisitng question a second time
+
+module top_module (
+    input clk,
+    input areset,
+    input x,
+    output z
+); 
+    parameter ZERO=0, INVERT=1;
+    reg state, next_state;
+    always @(*) begin
+        case (state)
+            ZERO: next_state = x? INVERT:ZERO;
+            INVERT: next_state = INVERT;
+        endcase
+    end
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state<=ZERO;
+        end
+        else begin
+            state<=next_state;
+        end
+    end
+    
+    assign z=(state==ZERO)? (x? 1:0):(x? 0:1);
+
+endmodule
+
+*/
