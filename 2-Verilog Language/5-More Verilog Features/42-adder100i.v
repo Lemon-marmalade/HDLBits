@@ -39,3 +39,23 @@ module fadd(
 endmodule
 
 */
+
+/* Trying instance array (much better)
+
+module top_module( 
+    input [99:0] a, b,
+    input cin,
+    output [99:0] cout,
+    output [99:0] sum );
+    
+    fadd u0 (a[0],b[0],cin,cout[0],sum[0]);
+    fadd ui [99:1] (a[99:1],b[99:1],cout[98:0],cout[99:1],sum[99:1]);
+endmodule
+
+module fadd( 
+    input a, b, cin,
+    output cout, sum );
+    assign {cout,sum} = a+b+cin;
+endmodule
+
+*/
