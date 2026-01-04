@@ -52,3 +52,60 @@ module top_module (
     assign done = (state==G);
 
 endmodule
+
+/* Another method of implementing final timer (with reduced states)
+module top_module (
+    input clk,
+    input reset,      // Synchronous reset
+    input data,
+    output [3:0] count,
+    output counting,
+    output done,
+    input ack );
+    
+    parameter IDLE=2'b0, SHIFT=2'b1, COUNT=2'd2, DONE=2'd3;
+    reg [1:0] state, next_state;
+    reg [3:0] q; // Pattern detection for shift_ena AND for storing value of delay
+    integer clkcount; // For determining delay duration AND for counting
+    
+    always @(*) begin
+        case(state)
+            IDLE: next_state = ({q[2:0],data}==4'b1101)? SHIFT:IDLE;
+            SHIFT: next_state = (clkcount==1)? COUNT:SHIFT;
+            COUNT: next_state = (clkcount==999 && q==4'b0)? DONE:COUNT;
+            DONE: next_state = ack? IDLE:DONE;
+        endcase
+    end
+    
+    always @(posedge clk) begin
+        if (reset) begin
+            state<=IDLE;
+        	q<=4'b0;
+            clkcount<=4;
+        end
+        else begin
+            state<=next_state;
+            case(state) 
+                IDLE: q<={q[2:0],data};
+                SHIFT: begin
+                    clkcount<=clkcount-1;
+                    q<={q[2:0],data};
+                end
+                COUNT: begin
+                    if (clkcount==999 && q!=4'b0) begin // Thousand-mark transition
+                        q <= q-4'b1;
+                        clkcount <= 0;
+                    end
+                    else
+                        clkcount <= clkcount+1;
+                    end
+                DONE: clkcount<=4; // reset count for next SHIFT
+            endcase
+        end
+    end
+    assign count = q;
+    assign counting = (state==COUNT);
+    assign done = (state==DONE);
+
+endmodule
+*/
