@@ -42,3 +42,20 @@ module top_module(
 endmodule
 
 */
+
+/* Instance array version (much more concise)
+
+module top_module( 
+    input [399:0] a, b,
+    input cin,
+    output cout,
+    output [399:0] sum );
+    
+    wire[98:0] c;
+    bcd_fadd u0 (a[3:0],b[3:0],cin, c[0],sum[3:0]);
+    bcd_fadd ui [99:1] (a[399:4],b[399:4],c[98:0],{cout,c[98:1]},sum[399:4]);
+
+
+endmodule
+
+*/
