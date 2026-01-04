@@ -20,3 +20,25 @@ module top_module(
     assign cout = cout_wires[99];
     
 endmodule
+
+/* Different generate version
+
+module top_module( 
+    input [399:0] a, b,
+    input cin,
+    output cout,
+    output [399:0] sum );
+    
+    wire[98:0] c;
+    bcd_fadd u0 (a[3:0],b[3:0],cin, c[0],sum[3:0]);
+    genvar i;
+    generate
+        for (i=1;i<99;i++) begin: bcdfadd_gen
+            bcd_fadd ui (a[i*4+3-:4],b[i*4+3-:4],c[i-1],c[i],sum[i*4+3-:4]);
+        end
+    endgenerate
+    bcd_fadd u99 (a[399:396],b[399:396],c[98], cout,sum[399:396]);
+
+endmodule
+
+*/
