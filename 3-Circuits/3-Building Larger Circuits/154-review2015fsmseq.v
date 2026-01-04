@@ -24,3 +24,39 @@ module top_module (
     end
     assign start_shifting = (state==E);
 endmodule
+
+/* Mealy version
+
+module top_module (
+    input clk,
+    input reset,      // Synchronous reset
+    input data,
+    output start_shifting);
+    
+    parameter IDLE=1'b0, SHIFT=1'b1;
+    reg state, next_state;
+    reg [3:0] q;
+    
+    always @(*) begin
+        case(state)
+            IDLE: next_state = ({q[2:0],data}==4'b1101)? SHIFT:IDLE;
+            SHIFT: next_state = SHIFT;
+        endcase
+    end
+    
+    always @(posedge clk) begin
+        if (reset) begin
+            state<=IDLE;
+        	q<=3'b0;
+        end
+        else begin
+            state<=next_state;
+    		q<={q[2:0],data};
+        end
+    end
+    
+    assign start_shifting = (state==SHIFT);
+
+endmodule
+
+*/
