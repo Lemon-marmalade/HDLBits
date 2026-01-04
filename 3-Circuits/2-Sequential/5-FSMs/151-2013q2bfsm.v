@@ -57,3 +57,53 @@ module top_module (
     assign g = ((s==D)|(s==E));
     assign f = (s==B);
 endmodule
+
+/* Different method with one less state (although output is dependent on clkcount now too
+
+module top_module (
+    input clk,
+    input resetn,    // active-low synchronous reset
+    input x,
+    input y,
+    output f,
+    output g
+); 
+    parameter A=0, X=2, Y=3, Y0=4, Y1=5;
+    reg [2:0] state, next_state;
+    reg [1:0] xx;
+    reg clkcount;
+    
+    always @(*) begin
+        case(state)
+            A: next_state = (clkcount==1)? X:A;
+            X: next_state = ({xx,x}==3'b101)? Y:X;
+            Y: next_state = y? Y1:((clkcount==1)? Y0:Y);
+            Y0: next_state = Y0;
+            Y1: next_state = Y1;
+        endcase
+    end
+    
+    always @(posedge clk) begin
+        if (~resetn) begin
+            state<=A;
+            xx<=2'b0;
+            clkcount<=0;
+        end
+        else begin
+            state<=next_state;
+            case(state)
+                A: clkcount<=clkcount+1;
+                X: begin
+                    clkcount<=0;
+                    xx<={xx[0],x};
+                end
+                Y: clkcount<=clkcount+1;
+            endcase
+        end
+    end
+    assign f = (state==A && clkcount==1); // could add another state after A to make f only state-dependent
+    assign g = (state==Y)||(state==Y1);
+   
+endmodule
+
+*/
