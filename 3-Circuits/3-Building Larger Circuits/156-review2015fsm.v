@@ -37,3 +37,54 @@ module top_module (
     assign counting = (state==F)? 1:0;
     assign done = (state==G)? 1:0;
 endmodule
+
+/* Revisited version with clearer explanation of logic and fewer states
+
+module top_module (
+    input clk,
+    input reset,      // Synchronous reset
+    input data,
+    output shift_ena,
+    output counting,
+    input done_counting,
+    output done,
+    input ack );
+    
+    parameter IDLE=2'b0, SHIFT=2'b1, COUNT=2'd2, DONE=2'd3;
+    reg [1:0] state, next_state;
+    reg [3:0] q; // Pattern detection for shift_ena
+    reg [1:0] clkcount; // For determining delay duration
+    
+    always @(*) begin
+        case(state)
+            IDLE: next_state = ({q[2:0],data}==4'b1101)? SHIFT:IDLE;
+            SHIFT: next_state = (clkcount==3)? COUNT:SHIFT;
+            COUNT: next_state = done_counting? DONE:COUNT;
+            DONE: next_state = ack? IDLE:DONE;
+        endcase
+    end
+    
+    always @(posedge clk) begin
+        if (reset) begin
+            state<=IDLE;
+        	q<=4'b0;
+            clkcount<=2'b0;
+        end
+        else begin
+            state<=next_state;
+            case(state) 
+                IDLE: q<={q[2:0],data};
+                SHIFT: clkcount<=clkcount+2'b1;
+                COUNT: clkcount<=2'b0; // reset count for next SHIFT
+                DONE: q<=4'b0; // reset data for next IDLE
+            endcase
+        end
+    end
+    
+    assign shift_ena = (state==SHIFT);
+    assign counting = (state==COUNT);
+    assign done = (state==DONE);
+
+endmodule
+
+*/
