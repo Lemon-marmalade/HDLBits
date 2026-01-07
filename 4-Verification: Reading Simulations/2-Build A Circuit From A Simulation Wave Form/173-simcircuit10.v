@@ -21,3 +21,25 @@ module top_module (
     end
 
 endmodule
+
+/* More concise version with ternary operator
+
+module top_module (
+    input clk,
+    input a,
+    input b,
+    output q,
+    output state  );
+    
+    reg next_state;
+    always @(*) begin
+        next_state = state? a|b:a&b;
+        q = state? ~(a^b):(a^b);
+    end
+    always @ (posedge clk) begin
+        state <= next_state;
+    end
+    
+endmodule
+
+*/
